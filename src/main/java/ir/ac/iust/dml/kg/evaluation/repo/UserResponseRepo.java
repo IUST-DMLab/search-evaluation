@@ -16,13 +16,13 @@ import java.util.List;
 public interface UserResponseRepo {
     
     void addUserResponse(UserResponse userResponse);
-    UserResponse getUserResponseByPersonQuery(String query, Integer personId);
-    List<UserResponse> getUserResponseByPersonId(Integer personId);
+    UserResponse getUserResponseByPersonQuery(String query, String personId);
+    List<UserResponse> getUserResponseByPersonId(String personId);
     List<UserResponse> getUserResponseByQuery(String q);
     void updateUserResponse(UserResponse userResponse);
     void deleteUserResponseByQuery(String query);
-    void deleteUserResponseByPersonId(Integer id);
-    void deleteUserResponseByPersonQuery(String query, Integer personId);
+    void deleteUserResponseByPersonId(String personId);
+    void deleteUserResponseByPersonQuery(String query, String personId);
     
-    
+ 
 }

@@ -12,12 +12,10 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.WriteResult;
-import ir.ac.iust.dml.kg.evaluation.model.Person;
 import ir.ac.iust.dml.kg.evaluation.model.Query;
 import ir.ac.iust.dml.kg.evaluation.model.UserAnswerStatus;
 import ir.ac.iust.dml.kg.evaluation.model.UserJudgment;
 import ir.ac.iust.dml.kg.evaluation.model.UserResponse;
-import ir.ac.iust.dml.kg.evaluation.repo.PersonRepo;
 import ir.ac.iust.dml.kg.evaluation.repo.UserResponseRepo;
 import ir.ac.iust.dml.kg.evaluation.util.MongoConnection;
 import java.util.ArrayList;
@@ -32,20 +30,20 @@ public class MongoUserResponseRepo implements UserResponseRepo {
     private final MongoConnection mongoConnection;
     private final MongoClient mongoClient;
     private final DBCollection collection;
-    private final PersonRepo personRepo;
+   // private final PersonRepo personRepo;
 
-    public MongoUserResponseRepo(String dbName, String collectionName, MongoPersonRepo personRepo, String host, Integer port) {
+    public MongoUserResponseRepo(String dbName, String collectionName, String host, Integer port) {
         mongoConnection = new MongoConnection();
         this.mongoClient = mongoConnection.createSimpleConnection(host, port);
         collection = this.mongoClient.getDB(dbName).getCollection(collectionName);
-        this.personRepo = personRepo;
+       // this.personRepo = personRepo;
     }
 
-    public MongoUserResponseRepo(String dbName, String collectionName, String host, Integer port, String username, String password,MongoPersonRepo personRepo) {
+    public MongoUserResponseRepo(String dbName, String collectionName, String host, Integer port, String username, String password) {
         mongoConnection = new MongoConnection();
         this.mongoClient = mongoConnection.createConnection(username, dbName, password, host, port);
         collection = this.mongoClient.getDB(dbName).getCollection(collectionName);
-        this.personRepo = personRepo;
+       // this.personRepo = personRepo;
     }
 
     @Override
@@ -54,19 +52,20 @@ public class MongoUserResponseRepo implements UserResponseRepo {
         BasicDBObject document = new BasicDBObject();
         for (UserJudgment userJudgment : userResponse.getJudgmentList()) {
             BasicDBObject innerObject = new BasicDBObject();
-            innerObject.put("answerUri", userJudgment.getAnswerUri());
+            innerObject.put("answer", userJudgment.getAnswer());
             innerObject.put("relevant", userJudgment.isRelevant());
             dbList.add(innerObject);
         }
         document.put("judgmentList", dbList);
 
-        BasicDBObject personInnerObject = new BasicDBObject();
+       /* BasicDBObject personInnerObject = new BasicDBObject();
         personInnerObject.put("id", userResponse.getPerson().getId());
         personInnerObject.put("name", userResponse.getPerson().getName());
-        document.put("person", personInnerObject);
+        document.put("person", personInnerObject);*/
+        document.put("personId", userResponse.getPersonId());
 
         BasicDBObject queryInnerObject = new BasicDBObject();
-        queryInnerObject.put("id", userResponse.getQuery().getId());
+      //  queryInnerObject.put("id", userResponse.getQuery().getId());
         queryInnerObject.put("query", userResponse.getQuery().getQ());
         document.put("query", queryInnerObject);
 
@@ -101,23 +100,24 @@ public class MongoUserResponseRepo implements UserResponseRepo {
                 BasicDBList dbList = (BasicDBList) result.get("judgmentList");
                 for (Object judgmentObj : dbList) {
                     BasicDBObject judgmentBasicObj = (BasicDBObject) judgmentObj;
-                    String answerUri = (String) judgmentBasicObj.get("answerUri");
+                    String answer = (String) judgmentBasicObj.get("answer");
                     Boolean relevant = (Boolean) judgmentBasicObj.get("relevant");
                     UserJudgment userJudgment = new UserJudgment();
-                    userJudgment.setAnswerUri(answerUri);
+                    userJudgment.setAnswer(answer);
                     userJudgment.setRelevant(relevant);
                     userJudgmentList.add(userJudgment);
                 }
                 userResponse.setJudgmentList(userJudgmentList);
 
-                BasicDBObject personBasicObj = (BasicDBObject) result.get("person");
+                /*BasicDBObject personBasicObj = (BasicDBObject) result.get("person");
                 Person person = new Person();
                 person.setId((Integer) personBasicObj.get("id"));
                 person.setName((String) personBasicObj.get("name"));
-                userResponse.setPerson(person);
+                userResponse.setPerson(person);*/
+                userResponse.setPersonId((String) result.get("personId"));
 
                 BasicDBObject queryBasicObj = (BasicDBObject) result.get("query");
-                query.setId((Integer) queryBasicObj.get("id"));
+              //  query.setId((Integer) queryBasicObj.get("id"));
                 userResponse.setQuery(query);
 
                 BasicDBObject statusBasicObj = (BasicDBObject) result.get("status");
@@ -136,11 +136,12 @@ public class MongoUserResponseRepo implements UserResponseRepo {
     }
 
     @Override
-    public List<UserResponse> getUserResponseByPersonId(Integer id) {
-        Person person = this.personRepo.getPersonById(id);
+    public List<UserResponse> getUserResponseByPersonId(String personId) {
+       // Person person = this.personRepo.getPersonById(id);
+       
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put("type", UserResponse.TYPE);
-        searchQuery.put("person.id", id);
+        searchQuery.put("personId", personId);
 
         DBCursor cursor = collection.find(searchQuery);
 
@@ -155,10 +156,10 @@ public class MongoUserResponseRepo implements UserResponseRepo {
                 BasicDBList dbList = (BasicDBList) result.get("judgmentList");
                 for (Object judgmentObj : dbList) {
                     BasicDBObject judgmentBasicObj = (BasicDBObject) judgmentObj;
-                    String answerUri = (String) judgmentBasicObj.get("answerUri");
+                    String answer = (String) judgmentBasicObj.get("answer");
                     Boolean relevant = (Boolean) judgmentBasicObj.get("relevant");
                     UserJudgment userJudgment = new UserJudgment();
-                    userJudgment.setAnswerUri(answerUri);
+                    userJudgment.setAnswer(answer);
                     userJudgment.setRelevant(relevant);
                     userJudgmentList.add(userJudgment);
                 }
@@ -168,13 +169,14 @@ public class MongoUserResponseRepo implements UserResponseRepo {
                 //BasicDBObject personBasicObj = (BasicDBObject) result.get("person");
                 //person.setId(id);
                 //person.setName((String) personBasicObj.get("name"));
-                userResponse.setPerson(person);
+               // userResponse.setPerson(person);
+               userResponse.setPersonId(personId);
 
                 //query
                 BasicDBObject queryBasicObj = (BasicDBObject) result.get("query");
                 Query query = new Query();
                 query.setQuery((String) queryBasicObj.get("query"));
-                query.setId((Integer) queryBasicObj.get("id"));
+            //    query.setId((Integer) queryBasicObj.get("id"));
                 userResponse.setQuery(query);
 
                 //status
@@ -194,12 +196,12 @@ public class MongoUserResponseRepo implements UserResponseRepo {
     }
 
     @Override
-    public UserResponse getUserResponseByPersonQuery(String q, Integer personId) {
+    public UserResponse getUserResponseByPersonQuery(String q, String personId) {
 
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put("type", UserResponse.TYPE);
         searchQuery.put("query.query", q);
-        searchQuery.put("person.id", personId);
+        searchQuery.put("personId", personId);
         DBCursor cursor = collection.find(searchQuery);
         DBObject result = cursor.next();
 
@@ -209,24 +211,25 @@ public class MongoUserResponseRepo implements UserResponseRepo {
         BasicDBList dbList = (BasicDBList) result.get("judgmentList");
         for (Object judgmentObj : dbList) {
             BasicDBObject judgmentBasicObj = (BasicDBObject) judgmentObj;
-            String answerUri = (String) judgmentBasicObj.get("answerUri");
+            String answer = (String) judgmentBasicObj.get("answer");
             Boolean relevant = (Boolean) judgmentBasicObj.get("relevant");
             UserJudgment userJudgment = new UserJudgment();
-            userJudgment.setAnswerUri(answerUri);
+            userJudgment.setAnswer(answer);
             userJudgment.setRelevant(relevant);
             userJudgmentList.add(userJudgment);
         }
         userResponse.setJudgmentList(userJudgmentList);
 
         //person
-        Person person = personRepo.getPersonById(personId);
-        userResponse.setPerson(person);
+        /*Person person = personRepo.getPersonById(personId);
+        userResponse.setPerson(person);*/
+        userResponse.setPersonId(personId);
 
         //query
         BasicDBObject queryBasicObj = (BasicDBObject) result.get("query");
         Query query = new Query();
         query.setQuery(q);
-        query.setId((Integer) queryBasicObj.get("id"));
+      //  query.setId((Integer) queryBasicObj.get("id"));
         userResponse.setQuery(query);
 
         //status
@@ -241,7 +244,7 @@ public class MongoUserResponseRepo implements UserResponseRepo {
 
     @Override
     public void updateUserResponse(UserResponse userResponse) {
-        deleteUserResponseByPersonQuery(userResponse.getQuery().getQ(), userResponse.getPerson().getId());
+        deleteUserResponseByPersonQuery(userResponse.getQuery().getQ(), userResponse.getPersonId());
         addUserResponse(userResponse);
     }
 
@@ -255,19 +258,19 @@ public class MongoUserResponseRepo implements UserResponseRepo {
     }
 
     @Override
-    public void deleteUserResponseByPersonId(Integer id) {
+    public void deleteUserResponseByPersonId(String personId) {
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put("type", UserResponse.TYPE);
-        searchQuery.put("person.id", id);
+        searchQuery.put("personId", personId);
         this.collection.remove(searchQuery);
     }
 
     @Override
-    public void deleteUserResponseByPersonQuery(String query, Integer personId) {
+    public void deleteUserResponseByPersonQuery(String query, String personId) {
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put("type", UserResponse.TYPE);
         searchQuery.put("query.query", query);
-        searchQuery.put("person.id", personId);
+        searchQuery.put("personId", personId);
         this.collection.remove(searchQuery);
     }
 

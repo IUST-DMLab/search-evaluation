@@ -15,7 +15,8 @@ import java.util.List;
 public class UserResponse {
 
     public static final String TYPE = "UserResponse";
-    private Person person;
+    //private Person person;
+    String personId;
     private Query query;
     private List<UserJudgment> judgmentList;
     private UserAnswerStatus status;
@@ -45,12 +46,21 @@ public class UserResponse {
         this.status = status;
     }
 
-    public Person getPerson() {
+   /* public Person getPerson() {
         return person;
     }
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+    */
+
+    public String getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(String personId) {
+        this.personId = personId;
     }
     
     

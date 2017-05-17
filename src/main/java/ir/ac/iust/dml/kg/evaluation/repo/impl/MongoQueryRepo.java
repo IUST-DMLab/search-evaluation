@@ -41,7 +41,7 @@ public class MongoQueryRepo implements QueryRepo {
     @Override
     public void addQuery(Query query) {
         BasicDBObject document = new BasicDBObject();
-        document.put("id", query.getId());
+      //  document.put("id", query.getId());
         document.put("query", query.getQ());
         document.put("type", query.TYPE);
         
@@ -49,7 +49,7 @@ public class MongoQueryRepo implements QueryRepo {
      
     }
 
-    @Override
+ /*   @Override
     public Query getQueryById(Integer id) {
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put("type", Query.TYPE);
@@ -64,8 +64,9 @@ public class MongoQueryRepo implements QueryRepo {
         
         return query; 
     }
-
-    @Override
+*/
+    
+ /*   @Override
     public void updateQuery(Query query) {
         
         Query originalQuery = getQueryById(query.getId());
@@ -79,9 +80,9 @@ public class MongoQueryRepo implements QueryRepo {
         updatedDoc.put("query", query.getQ());
         updatedDoc.put("type", Query.TYPE);
         this.collection.update(originalDoc, updatedDoc);
-    }
+    }*/
 
-    @Override
+  /*  @Override
     public void deleteQueryById(Integer id) {
         Query query = getQueryById(id);
         BasicDBObject document = new BasicDBObject();
@@ -90,7 +91,7 @@ public class MongoQueryRepo implements QueryRepo {
         document.put("type", query.TYPE);
         
         this.collection.remove(document);
-    }
+    }*/
 
     @Override
     public List<Query> getAllQuery() {
@@ -103,7 +104,7 @@ public class MongoQueryRepo implements QueryRepo {
         while(cursor.hasNext()){
             DBObject result = cursor.next();
             Query query = new Query();
-            query.setId((Integer) result.get("id"));
+          //  query.setId((Integer) result.get("id"));
             query.setQuery((String) result.get("query"));
        //     person.setUnreadQueryIds((ArrayList<Integer>) result.get("unreadQueryIds"));
             

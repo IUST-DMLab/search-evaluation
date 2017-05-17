@@ -15,5 +15,6 @@ import java.util.List;
 public interface UserResponseService {
     
     void saveUserResponse(UserResponse userResponse);
-    List<UserResponse> getUserResponseByPersonId(Integer personId);
+    List<UserResponse> getUserResponseByPersonId(String personId);
+    List<UserResponse> getUserResponseByQuery(String query);
 }

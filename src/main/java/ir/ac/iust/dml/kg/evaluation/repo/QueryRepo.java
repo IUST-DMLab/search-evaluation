@@ -15,8 +15,8 @@ import java.util.List;
 public interface QueryRepo {
     
     void addQuery(Query query);
-    Query getQueryById(Integer id);
-    void updateQuery(Query query);
-    void deleteQueryById(Integer id);
+   // Query getQueryById(Integer id);
+   // void updateQuery(Query query);
+   // void deleteQueryById(Integer id);
     List<Query> getAllQuery();
 }

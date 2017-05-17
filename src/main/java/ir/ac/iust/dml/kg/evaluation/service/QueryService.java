@@ -16,10 +16,10 @@ import java.util.List;
 public interface QueryService {
     
     void saveQuery(Query query);
-    Query getQueryById(Integer id);
-    Query getUnreadQueryByPersonId(Integer personId);
-    void updateQuery(Query query);
-    void deleteQueryById(Integer id);
+  //  Query getQueryById(Integer id);
+    Query getUnreadQueryByPersonId(String personId);
+  //  void updateQuery(Query query);
+  //  void deleteQueryById(Integer id);
     List<Query> getAllQueries();
     
 }

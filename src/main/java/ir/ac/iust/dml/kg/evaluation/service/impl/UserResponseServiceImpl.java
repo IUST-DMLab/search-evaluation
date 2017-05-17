@@ -39,8 +39,13 @@ public class UserResponseServiceImpl implements UserResponseService{
     }
 
     @Override
-    public List<UserResponse> getUserResponseByPersonId(Integer personId) {
+    public List<UserResponse> getUserResponseByPersonId(String personId) {
         return this.userResponseRepo.getUserResponseByPersonId(personId);
+    }
+
+    @Override
+    public List<UserResponse> getUserResponseByQuery(String query) {
+        return this.userResponseRepo.getUserResponseByQuery(query);
     }
 
    

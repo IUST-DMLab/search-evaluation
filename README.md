@@ -18,5 +18,12 @@ run query and show system response to user.
 create a `UserResponse` object for each query and persist using `UserResponseService`
 
 # 2. Evaluation
-TODO
+use `KnowledgeGraphEvaluator` to elvaluate knowledge graph results
+
+
+steps:
+* get all queries with  `QueryService.getAllQueries()`
+* run each query on knowledge graph searcher
+* create a `KnowledgeGraphResponse` object for each query results
+* call `KnowledgeGraphEvaluator.calculatePrecisionAtK` and pass knowledgeGraphResponses and desired K to get precision
 

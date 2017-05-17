@@ -12,7 +12,7 @@ package ir.ac.iust.dml.kg.evaluation.model;
 public class Query {
 
     public static final String TYPE = "QUERY";
-    private Integer id;
+   // private Integer id;
     private String q;
 
    
@@ -24,12 +24,12 @@ public class Query {
         this.q = query;
     }
     
-    public Integer getId() {
+ /*   public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
     }
-    
+ */   
 }

@@ -33,13 +33,13 @@ public class QueryServiceImpl implements QueryService {
 
     }
 
-    @Override
+  /*  @Override
     public Query getQueryById(Integer id) {
         return this.queryRepo.getQueryById(id);
     }
-
+   */
     @Override
-    public Query getUnreadQueryByPersonId(Integer personId) {
+    public Query getUnreadQueryByPersonId(String personId) {
         List<Query> allQueries = queryRepo.getAllQuery();
         List<UserResponse> userResponseList = userResponseService.getUserResponseByPersonId(personId);
 
@@ -64,7 +64,7 @@ public class QueryServiceImpl implements QueryService {
         return false;
     }
 
-    @Override
+  /*  @Override
     public void updateQuery(Query query) {
         this.queryRepo.updateQuery(query);
     }
@@ -72,7 +72,7 @@ public class QueryServiceImpl implements QueryService {
     @Override
     public void deleteQueryById(Integer id) {
         this.queryRepo.deleteQueryById(id);
-    }
+    }*/
 
     @Override
     public List<Query> getAllQueries() {

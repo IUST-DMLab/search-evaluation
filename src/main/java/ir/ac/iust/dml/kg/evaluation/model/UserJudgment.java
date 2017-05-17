@@ -11,15 +11,15 @@ package ir.ac.iust.dml.kg.evaluation.model;
  */
 public class UserJudgment {
     
-    private String answerUri;
+    private String answer;
     private Boolean relevant;
 
-    public String getAnswerUri() {
-        return answerUri;
+    public String getAnswer() {
+        return answer;
     }
 
-    public void setAnswerUri(String answerUri) {
-        this.answerUri = answerUri;
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 
     public Boolean isRelevant() {
