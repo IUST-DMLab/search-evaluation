@@ -105,7 +105,7 @@ public class MongoQueryRepo implements QueryRepo {
             DBObject result = cursor.next();
             Query query = new Query();
           //  query.setId((Integer) result.get("id"));
-            query.setQuery((String) result.get("query"));
+            query.setQ((String) result.get("query"));
        //     person.setUnreadQueryIds((ArrayList<Integer>) result.get("unreadQueryIds"));
             
             queryList.add(query);

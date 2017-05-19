@@ -11,7 +11,7 @@ package ir.ac.iust.dml.kg.evaluation.model;
  */
 public class Query {
 
-    public static final String TYPE = "QUERY";
+   public static final String TYPE = "QUERY";
    // private Integer id;
     private String q;
 
@@ -20,8 +20,8 @@ public class Query {
         return q;
     }
 
-    public void setQuery(String query) {
-        this.q = query;
+    public void setQ(String q) {
+        this.q = q;
     }
     
  /*   public Integer getId() {

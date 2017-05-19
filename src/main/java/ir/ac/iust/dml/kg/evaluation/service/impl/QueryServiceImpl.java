@@ -22,8 +22,8 @@ public class QueryServiceImpl implements QueryService {
     private final QueryRepo queryRepo;
     private final UserResponseService userResponseService;
 
-    public QueryServiceImpl(MongoQueryRepo mongoQueryRepo, UserResponseService userResponseService) {
-        this.queryRepo = mongoQueryRepo;
+    public QueryServiceImpl(QueryRepo queryRepo, UserResponseService userResponseService) {
+        this.queryRepo = queryRepo;
         this.userResponseService = userResponseService;
     }
 

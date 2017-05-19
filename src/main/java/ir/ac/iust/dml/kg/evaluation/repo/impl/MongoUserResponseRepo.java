@@ -82,7 +82,7 @@ public class MongoUserResponseRepo implements UserResponseRepo {
     @Override
     public List<UserResponse> getUserResponseByQuery(String q) {
         Query query = new Query();
-        query.setQuery(q);
+        query.setQ(q);
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put("type", UserResponse.TYPE);
         searchQuery.put("query.query", q);
@@ -175,7 +175,7 @@ public class MongoUserResponseRepo implements UserResponseRepo {
                 //query
                 BasicDBObject queryBasicObj = (BasicDBObject) result.get("query");
                 Query query = new Query();
-                query.setQuery((String) queryBasicObj.get("query"));
+                query.setQ((String) queryBasicObj.get("query"));
             //    query.setId((Integer) queryBasicObj.get("id"));
                 userResponse.setQuery(query);
 
@@ -228,7 +228,7 @@ public class MongoUserResponseRepo implements UserResponseRepo {
         //query
         BasicDBObject queryBasicObj = (BasicDBObject) result.get("query");
         Query query = new Query();
-        query.setQuery(q);
+        query.setQ(q);
       //  query.setId((Integer) queryBasicObj.get("id"));
         userResponse.setQuery(query);
 
