@@ -18,41 +18,40 @@ import java.util.List;
  * @author r.farjamfard
  */
 public class QueryServiceImpl implements QueryService {
-
+    
     private final QueryRepo queryRepo;
     private final UserResponseService userResponseService;
-
+    
     public QueryServiceImpl(QueryRepo queryRepo, UserResponseService userResponseService) {
         this.queryRepo = queryRepo;
         this.userResponseService = userResponseService;
     }
-
+    
     @Override
     public void saveQuery(Query query) {
         this.queryRepo.addQuery(query);
-
+        
     }
 
-  /*  @Override
-    public Query getQueryById(Integer id) {
-        return this.queryRepo.getQueryById(id);
-    }
-   */
+    /*  @Override
+     public Query getQueryById(Integer id) {
+     return this.queryRepo.getQueryById(id);
+     }
+     */
     @Override
     public Query getUnreadQueryByPersonId(String personId) {
         List<Query> allQueries = queryRepo.getAllQuery();
         List<UserResponse> userResponseList = userResponseService.getUserResponseByPersonId(personId);
-
+        
         for (Query query : allQueries) {
-            if(isQueryResponded(query, userResponseList)==false)
-            {
+            if (isQueryResponded(query, userResponseList) == false) {
                 return query;
             }
         }
         //no Unread query
         return null;
     }
-
+    
     private boolean isQueryResponded(Query query, List<UserResponse> userResponseList) {
         if (userResponseList != null) {
             for (UserResponse response : userResponseList) {
@@ -64,19 +63,24 @@ public class QueryServiceImpl implements QueryService {
         return false;
     }
 
-  /*  @Override
-    public void updateQuery(Query query) {
-        this.queryRepo.updateQuery(query);
-    }
+    /*  @Override
+     public void updateQuery(Query query) {
+     this.queryRepo.updateQuery(query);
+     }
 
-    @Override
-    public void deleteQueryById(Integer id) {
-        this.queryRepo.deleteQueryById(id);
-    }*/
-
+     @Override
+     public void deleteQueryById(Integer id) {
+     this.queryRepo.deleteQueryById(id);
+     }*/
     @Override
     public List<Query> getAllQueries() {
         return this.queryRepo.getAllQuery();
     }
-
+    
+    @Override
+    public void deleteQuery(Query query) {
+        this.userResponseService.deleteUserResponseByQuery(query.getQ());
+        this.queryRepo.deleteQuery(query);
+    }
+    
 }

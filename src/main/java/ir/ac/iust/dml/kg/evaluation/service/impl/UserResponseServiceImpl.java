@@ -48,5 +48,10 @@ public class UserResponseServiceImpl implements UserResponseService{
         return this.userResponseRepo.getUserResponseByQuery(query);
     }
 
+    @Override
+    public void deleteUserResponseByQuery(String query) {
+        this.userResponseRepo.deleteUserResponseByQuery(query);
+    }
+
    
 }

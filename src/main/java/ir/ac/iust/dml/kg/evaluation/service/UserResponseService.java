@@ -13,8 +13,13 @@ import java.util.List;
  * @author r.farjamfard
  */
 public interface UserResponseService {
-    
+
     void saveUserResponse(UserResponse userResponse);
+
     List<UserResponse> getUserResponseByPersonId(String personId);
+
     List<UserResponse> getUserResponseByQuery(String query);
+
+    void deleteUserResponseByQuery(String query);
+
 }

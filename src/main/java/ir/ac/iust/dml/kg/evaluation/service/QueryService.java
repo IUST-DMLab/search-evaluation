@@ -19,7 +19,7 @@ public interface QueryService {
   //  Query getQueryById(Integer id);
     Query getUnreadQueryByPersonId(String personId);
   //  void updateQuery(Query query);
-  //  void deleteQueryById(Integer id);
+    void deleteQuery(Query query);
     List<Query> getAllQueries();
     
 }

@@ -5,6 +5,7 @@
  */
 package ir.ac.iust.dml.kg.evaluation.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public class KnowledgeGraphResponse {
     private String query;
-    List<String> UriList;
+    private List<String> UriList;
 
     public String getQuery() {
         return query;
@@ -24,6 +25,10 @@ public class KnowledgeGraphResponse {
     }
 
     public List<String> getUriList() {
+        if(UriList==null)
+        {
+            UriList=new ArrayList<>();
+        }
         return UriList;
     }
 
