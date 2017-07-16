@@ -11,8 +11,10 @@ import ir.ac.iust.dml.kg.evaluation.model.UserResponse;
 import ir.ac.iust.dml.kg.evaluation.service.KnowledgeGraphEvaluator;
 import ir.ac.iust.dml.kg.evaluation.service.UserResponseService;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -32,8 +34,11 @@ public class KnowledgeGraphEvaluatorImpl implements KnowledgeGraphEvaluator {
         for (KnowledgeGraphResponse kgResponse : knowledgeGraphResponses) {
             List<UserResponse> userResponses = this.userResponseService.getUserResponseByQuery(kgResponse.getQuery());
             if (userResponses != null && userResponses.size() > 0) { //calculate precision for judged queries
-                int totalCount = kgResponse.getUriList().size();
-                int truePositiveCounts = caculateTruePositiveCounts(userResponses, kgResponse.getUriList());
+                int totalResultCount = kgResponse.getUriList().size();
+                Set<String> relevantAnswers= getAllRelevantAnswers(userResponses);
+                int totalRelevantAnswers=relevantAnswers.size();
+                int totalCount=Math.min(totalResultCount,totalRelevantAnswers);
+                int truePositiveCounts = caculateTruePositiveCounts(relevantAnswers, kgResponse.getUriList());
                 float precision = (float) truePositiveCounts / (float) totalCount;
                 allPrecisions.add(precision);
             }
@@ -42,19 +47,47 @@ public class KnowledgeGraphEvaluatorImpl implements KnowledgeGraphEvaluator {
         return totalPrecision;
     }
 
-    private int caculateTruePositiveCounts(List<UserResponse> userResponses, List<String> kgUriList) {
+    private int caculateTruePositiveCounts(Set<String> relevantAnswers, List<String> kgUriList) {
 
         int truePositiveAnswers = 0;
 
         if (!kgUriList.isEmpty()) {
             for (String uri : kgUriList) {
-                if (isRelevant(uri, userResponses)) {
+                if (relevantAnswers.contains(uri)) {
                     truePositiveAnswers++;
                 }
             }//
         }
 
         return truePositiveAnswers;
+    }
+
+    private Set<String> getAllRelevantAnswers(List<UserResponse> userResponses) {
+        Set<String> allAnswers = getAllJudgedAnswers(userResponses);
+        Set<String> relevantAnswers = new HashSet<>();
+
+        for (String answer : allAnswers) {
+            if (isRelevant(answer, userResponses)) {
+                relevantAnswers.add(answer);
+            }
+        }
+        return relevantAnswers;
+
+    }
+
+    private Set<String> getAllJudgedAnswers(List<UserResponse> userResponses) {
+        Set<String> allAnswers = new HashSet<>();
+        for (UserResponse userResponse : userResponses) {
+            if (userResponse != null) {
+                List<UserJudgment> judgments = userResponse.getJudgmentList();
+                if (judgments != null) {
+                    for (UserJudgment judgment : judgments) {
+                        allAnswers.add(judgment.getAnswer());
+                    }
+                }
+            }
+        }
+        return allAnswers;
     }
 
     private boolean isRelevant(String uri, List<UserResponse> userResponses) {
