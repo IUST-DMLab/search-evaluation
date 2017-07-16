@@ -18,19 +18,19 @@ import java.util.List;
  * @author r.farjamfard
  */
 public class QueryServiceImpl implements QueryService {
-    
+
     private final QueryRepo queryRepo;
     private final UserResponseService userResponseService;
-    
+
     public QueryServiceImpl(QueryRepo queryRepo, UserResponseService userResponseService) {
         this.queryRepo = queryRepo;
         this.userResponseService = userResponseService;
     }
-    
+
     @Override
     public void saveQuery(Query query) {
         this.queryRepo.addQuery(query);
-        
+
     }
 
     /*  @Override
@@ -42,16 +42,21 @@ public class QueryServiceImpl implements QueryService {
     public Query getUnreadQueryByPersonId(String personId) {
         List<Query> allQueries = queryRepo.getAllQuery();
         List<UserResponse> userResponseList = userResponseService.getUserResponseByPersonId(personId);
-        
+
         for (Query query : allQueries) {
             if (isQueryResponded(query, userResponseList) == false) {
-                return query;
+                //limit response count for each query
+                List<UserResponse> queryUserRespones = userResponseService.getUserResponseByQuery(query.getQ());
+                //if no other judgment or less than 3
+                if (queryUserRespones == null || queryUserRespones.size() < 3) {
+                    return query;
+                }
             }
         }
         //no Unread query
         return null;
     }
-    
+
     private boolean isQueryResponded(Query query, List<UserResponse> userResponseList) {
         if (userResponseList != null) {
             for (UserResponse response : userResponseList) {
@@ -76,11 +81,11 @@ public class QueryServiceImpl implements QueryService {
     public List<Query> getAllQueries() {
         return this.queryRepo.getAllQuery();
     }
-    
+
     @Override
     public void deleteQuery(Query query) {
         this.userResponseService.deleteUserResponseByQuery(query.getQ());
         this.queryRepo.deleteQuery(query);
     }
-    
+
 }
