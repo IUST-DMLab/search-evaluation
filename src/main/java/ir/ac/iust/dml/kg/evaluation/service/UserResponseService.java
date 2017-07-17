@@ -20,6 +20,8 @@ public interface UserResponseService {
 
     List<UserResponse> getUserResponseByQuery(String query);
 
+    List<UserResponse> getJudgedUserResponseByQuery(String query);
+
     void deleteUserResponseByQuery(String query);
 
 }

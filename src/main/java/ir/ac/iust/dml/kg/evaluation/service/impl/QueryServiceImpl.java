@@ -46,7 +46,7 @@ public class QueryServiceImpl implements QueryService {
         for (Query query : allQueries) {
             if (isQueryResponded(query, userResponseList) == false) {
                 //limit response count for each query
-                List<UserResponse> queryUserRespones = userResponseService.getUserResponseByQuery(query.getQ());
+                List<UserResponse> queryUserRespones = userResponseService.getJudgedUserResponseByQuery(query.getQ());
                 //if no other judgment or less than 3
                 if (queryUserRespones == null || queryUserRespones.size() < 3) {
                     return query;

@@ -30,42 +30,44 @@ public class MongoUserResponseRepo implements UserResponseRepo {
     private final MongoConnection mongoConnection;
     private final MongoClient mongoClient;
     private final DBCollection collection;
-   // private final PersonRepo personRepo;
+    // private final PersonRepo personRepo;
 
     public MongoUserResponseRepo(String dbName, String collectionName, String host, Integer port) {
         mongoConnection = new MongoConnection();
         this.mongoClient = mongoConnection.createSimpleConnection(host, port);
         collection = this.mongoClient.getDB(dbName).getCollection(collectionName);
-       // this.personRepo = personRepo;
+        // this.personRepo = personRepo;
     }
 
     public MongoUserResponseRepo(String dbName, String collectionName, String host, Integer port, String username, String password) {
         mongoConnection = new MongoConnection();
         this.mongoClient = mongoConnection.createConnection(username, dbName, password, host, port);
         collection = this.mongoClient.getDB(dbName).getCollection(collectionName);
-       // this.personRepo = personRepo;
+        // this.personRepo = personRepo;
     }
 
     @Override
     public void addUserResponse(UserResponse userResponse) {
         BasicDBList dbList = new BasicDBList();
         BasicDBObject document = new BasicDBObject();
-        for (UserJudgment userJudgment : userResponse.getJudgmentList()) {
-            BasicDBObject innerObject = new BasicDBObject();
-            innerObject.put("answer", userJudgment.getAnswer());
-            innerObject.put("relevant", userJudgment.isRelevant());
-            dbList.add(innerObject);
+        if (userResponse.getJudgmentList() != null) {
+            for (UserJudgment userJudgment : userResponse.getJudgmentList()) {
+                BasicDBObject innerObject = new BasicDBObject();
+                innerObject.put("answer", userJudgment.getAnswer());
+                innerObject.put("relevant", userJudgment.isRelevant());
+                dbList.add(innerObject);
+            }
         }
         document.put("judgmentList", dbList);
 
-       /* BasicDBObject personInnerObject = new BasicDBObject();
-        personInnerObject.put("id", userResponse.getPerson().getId());
-        personInnerObject.put("name", userResponse.getPerson().getName());
-        document.put("person", personInnerObject);*/
+        /* BasicDBObject personInnerObject = new BasicDBObject();
+         personInnerObject.put("id", userResponse.getPerson().getId());
+         personInnerObject.put("name", userResponse.getPerson().getName());
+         document.put("person", personInnerObject);*/
         document.put("personId", userResponse.getPersonId());
 
         BasicDBObject queryInnerObject = new BasicDBObject();
-      //  queryInnerObject.put("id", userResponse.getQuery().getId());
+        //  queryInnerObject.put("id", userResponse.getQuery().getId());
         queryInnerObject.put("query", userResponse.getQuery().getQ());
         document.put("query", queryInnerObject);
 
@@ -110,14 +112,14 @@ public class MongoUserResponseRepo implements UserResponseRepo {
                 userResponse.setJudgmentList(userJudgmentList);
 
                 /*BasicDBObject personBasicObj = (BasicDBObject) result.get("person");
-                Person person = new Person();
-                person.setId((Integer) personBasicObj.get("id"));
-                person.setName((String) personBasicObj.get("name"));
-                userResponse.setPerson(person);*/
+                 Person person = new Person();
+                 person.setId((Integer) personBasicObj.get("id"));
+                 person.setName((String) personBasicObj.get("name"));
+                 userResponse.setPerson(person);*/
                 userResponse.setPersonId((String) result.get("personId"));
 
                 BasicDBObject queryBasicObj = (BasicDBObject) result.get("query");
-              //  query.setId((Integer) queryBasicObj.get("id"));
+                //  query.setId((Integer) queryBasicObj.get("id"));
                 userResponse.setQuery(query);
 
                 BasicDBObject statusBasicObj = (BasicDBObject) result.get("status");
@@ -138,7 +140,7 @@ public class MongoUserResponseRepo implements UserResponseRepo {
     @Override
     public List<UserResponse> getUserResponseByPersonId(String personId) {
        // Person person = this.personRepo.getPersonById(id);
-       
+
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put("type", UserResponse.TYPE);
         searchQuery.put("personId", personId);
@@ -169,14 +171,14 @@ public class MongoUserResponseRepo implements UserResponseRepo {
                 //BasicDBObject personBasicObj = (BasicDBObject) result.get("person");
                 //person.setId(id);
                 //person.setName((String) personBasicObj.get("name"));
-               // userResponse.setPerson(person);
-               userResponse.setPersonId(personId);
+                // userResponse.setPerson(person);
+                userResponse.setPersonId(personId);
 
                 //query
                 BasicDBObject queryBasicObj = (BasicDBObject) result.get("query");
                 Query query = new Query();
                 query.setQ((String) queryBasicObj.get("query"));
-            //    query.setId((Integer) queryBasicObj.get("id"));
+                //    query.setId((Integer) queryBasicObj.get("id"));
                 userResponse.setQuery(query);
 
                 //status
@@ -222,14 +224,14 @@ public class MongoUserResponseRepo implements UserResponseRepo {
 
         //person
         /*Person person = personRepo.getPersonById(personId);
-        userResponse.setPerson(person);*/
+         userResponse.setPerson(person);*/
         userResponse.setPersonId(personId);
 
         //query
         BasicDBObject queryBasicObj = (BasicDBObject) result.get("query");
         Query query = new Query();
         query.setQ(q);
-      //  query.setId((Integer) queryBasicObj.get("id"));
+        //  query.setId((Integer) queryBasicObj.get("id"));
         userResponse.setQuery(query);
 
         //status

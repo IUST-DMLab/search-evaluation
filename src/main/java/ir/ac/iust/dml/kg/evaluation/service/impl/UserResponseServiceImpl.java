@@ -9,6 +9,7 @@ package ir.ac.iust.dml.kg.evaluation.service.impl;
 import ir.ac.iust.dml.kg.evaluation.model.UserResponse;
 import ir.ac.iust.dml.kg.evaluation.repo.UserResponseRepo;
 import ir.ac.iust.dml.kg.evaluation.service.UserResponseService;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -51,6 +52,20 @@ public class UserResponseServiceImpl implements UserResponseService{
     @Override
     public void deleteUserResponseByQuery(String query) {
         this.userResponseRepo.deleteUserResponseByQuery(query);
+    }
+
+    @Override
+    public List<UserResponse> getJudgedUserResponseByQuery(String query) {
+        List<UserResponse> allResponses=this.getUserResponseByQuery(query);
+        List<UserResponse> judgedResponses=new ArrayList<>();
+        for(UserResponse userResponse:allResponses)
+        {
+            if(userResponse.getStatus().isAbleToAnswer())
+            {
+                judgedResponses.add(userResponse);
+            }
+        }
+        return judgedResponses;
     }
 
    

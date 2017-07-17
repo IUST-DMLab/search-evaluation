@@ -32,7 +32,7 @@ public class KnowledgeGraphEvaluatorImpl implements KnowledgeGraphEvaluator {
     public float calculatePrecision(List<KnowledgeGraphResponse> knowledgeGraphResponses) {
         List<Float> allPrecisions = new ArrayList<>();
         for (KnowledgeGraphResponse kgResponse : knowledgeGraphResponses) {
-            List<UserResponse> userResponses = this.userResponseService.getUserResponseByQuery(kgResponse.getQuery());
+            List<UserResponse> userResponses = this.userResponseService.getJudgedUserResponseByQuery(kgResponse.getQuery());
             if (userResponses != null && userResponses.size() > 0) { //calculate precision for judged queries
                 int totalResultCount = kgResponse.getUriList().size();
                 Set<String> relevantAnswers= getAllRelevantAnswers(userResponses);
