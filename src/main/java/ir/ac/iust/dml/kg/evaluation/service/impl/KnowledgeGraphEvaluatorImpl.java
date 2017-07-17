@@ -35,9 +35,12 @@ public class KnowledgeGraphEvaluatorImpl implements KnowledgeGraphEvaluator {
             List<UserResponse> userResponses = this.userResponseService.getJudgedUserResponseByQuery(kgResponse.getQuery());
             if (userResponses != null && userResponses.size() > 0) { //calculate precision for judged queries
                 int totalResultCount = kgResponse.getUriList().size();
-                Set<String> relevantAnswers= getAllRelevantAnswers(userResponses);
-                int totalRelevantAnswers=relevantAnswers.size();
-                int totalCount=Math.min(totalResultCount,totalRelevantAnswers);
+                Set<String> relevantAnswers = getAllRelevantAnswers(userResponses);
+                int totalRelevantAnswers = relevantAnswers.size();
+                int totalCount = totalResultCount;
+                if (totalRelevantAnswers > 0) {
+                    totalCount = Math.min(totalResultCount, totalRelevantAnswers);
+                }
                 int truePositiveCounts = caculateTruePositiveCounts(relevantAnswers, kgResponse.getUriList());
                 float precision = (float) truePositiveCounts / (float) totalCount;
                 allPrecisions.add(precision);
